@@ -24,7 +24,7 @@ class ThreadListViewController: UIViewController {
         }
         if urlString != nil {
         let fetchData = FetcherDataNetwork(urlString!)
-            let parserHtml = ParserHTMLTag("фбр")
+            let parserHtml = ParserHTMLTag("усик")
             parserHtml.addDependency(fetchData)
             operationQueue.addOperations([fetchData, parserHtml], waitUntilFinished: true)
         }

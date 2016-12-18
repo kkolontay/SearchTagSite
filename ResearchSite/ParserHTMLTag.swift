@@ -42,6 +42,7 @@ class ParserHTMLTag: MultyThreadingExecution {
             for textBlock in searchText! {
                 if textBlock.content != nil {
                 countOfMatches += (regEx?.test(input: textBlock.content!))!
+                    print(textBlock.content)
                 }
             }
             print("MATCHES = \(countOfMatches)")
