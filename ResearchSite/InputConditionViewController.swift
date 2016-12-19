@@ -9,21 +9,23 @@ import UIKit
 import Foundation
 
 class InputConditionViewController: UIViewController, UITextFieldDelegate{
-
+    
     @IBOutlet weak var inputURLTextField: UITextField!
     @IBOutlet weak var quantityThreadTextField: UITextField!
     @IBOutlet weak var searchTextTextField: UITextField!
     @IBOutlet weak var maxQuantityURLTextField: UITextField!
     @IBOutlet weak var myScrollView: UIScrollView!
     @IBOutlet weak var contentView: UIView!
-   // var connection:NetworkConnectionToSite?
+    
     var quantityThread: Int?
     var maxReferences: Int?
     var urlString: String?
+    var queueThreadData: QueueDataThreads?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         hideKeyboardWhenTappedAround()
+         queueThreadData = QueueDataThreads()
         inputURLTextField.delegate = self
         quantityThreadTextField.delegate = self
         searchTextTextField.delegate = self
@@ -36,13 +38,12 @@ class InputConditionViewController: UIViewController, UITextFieldDelegate{
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        
     }
     func keyboardWillShow(_ notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
-
-            let insets:UIEdgeInsets = UIEdgeInsetsMake(myScrollView.contentInset.top, 0.0, keyboardSize.height + 20, 0.0)
             
+            let insets:UIEdgeInsets = UIEdgeInsetsMake(myScrollView.contentInset.top, 0.0, keyboardSize.height + 20, 0.0)
             myScrollView.contentInset = insets
             myScrollView.scrollIndicatorInsets = insets
         }
@@ -53,27 +54,26 @@ class InputConditionViewController: UIViewController, UITextFieldDelegate{
     }
     
     
-    
     func keyboardWillHide(_ notification: NSNotification) {
-     
+        
         let insets:UIEdgeInsets = UIEdgeInsetsMake(myScrollView.contentInset.top, 0.0, 0.0, 0.0)
         
         myScrollView.contentInset = insets
         myScrollView.scrollIndicatorInsets = insets
-          }
+    }
     
     
     @IBAction func goButtonPressed(_ sender: UIButton) {
-         quantityThread = 1
-         maxReferences = 1
+        quantityThread = 1
+        maxReferences = 1
         if  quantityThreadTextField.text?.isEmpty == false , let quantityThreadTemp = Int(quantityThreadTextField.text!)   {
             if quantityThreadTemp > 0 && quantityThreadTemp < 15 {
                 quantityThread = quantityThreadTemp
             }
         }
         if maxQuantityURLTextField.text?.isEmpty == false, let quantityURL = Int(maxQuantityURLTextField.text!) {
-            if quantityURL > 0 && quantityURL < 100 {
-            maxReferences = quantityURL
+            if quantityURL > 0 && quantityURL < 10000 {
+                maxReferences = quantityURL
             }
         }
         if canOpenURL(string: inputURLTextField.text) {
@@ -84,18 +84,22 @@ class InputConditionViewController: UIViewController, UITextFieldDelegate{
             return
         }
         if searchTextTextField.text?.isEmpty == true {
-            _ = AlertController(self, error: "Ввудите текст для поиска.")
+            _ = AlertController(self, error: "Ввeдите текст для поиска.")
             return
         }
+        queueThreadData?.maxQuantityURL = maxReferences!
+        queueThreadData?.maxQuantityThread = quantityThread!
+        queueThreadData?.setNewURL(inputURLTextField.text!, url: inputURLTextField.text!)
         performSegue(withIdentifier: "search", sender: nil)
-     }
-
+    }
+    
     func canOpenURL(string: String?) -> Bool {
         
         let regEx = "((http|https)://)?((\\w)*|([0-9]*)|([-|_])*)+([\\.|/]((\\w)*|([0-9]*)|([-|_])*))+"
         let predicate = NSPredicate(format:"SELF MATCHES %@", argumentArray:[regEx])
         return predicate.evaluate(with: string)
     }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "search" {
             let controller = segue.destination as! ThreadListViewController
@@ -104,10 +108,9 @@ class InputConditionViewController: UIViewController, UITextFieldDelegate{
             controller.maximumLookingForString = maxReferences
             controller.urlString = urlString
         }
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
     }
 }
+
 extension UIViewController {
     func hideKeyboardWhenTappedAround() {
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))

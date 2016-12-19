@@ -13,23 +13,30 @@ class ThreadListViewController: UIViewController {
     var maximumLookingForString: Int?
     var urlString: String?
     var lookingForText: String?
+    var operationQueue: OperationQueue?
+    var dataThreads: QueueDataThreads?
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let operationQueue = OperationQueue()
+        dataThreads = QueueDataThreads()
+         operationQueue = OperationQueue()
         if maximumThread != nil {
-        operationQueue.maxConcurrentOperationCount = maximumThread!
+        operationQueue?.maxConcurrentOperationCount = maximumThread!
         } else {
-            operationQueue.maxConcurrentOperationCount = 1
+            operationQueue?.maxConcurrentOperationCount = 1
         }
-        if urlString != nil {
-        let fetchData = FetcherDataNetwork(urlString!)
-            let parserHtml = ParserHTMLTag("усик")
-            parserHtml.addDependency(fetchData)
-            operationQueue.addOperations([fetchData, parserHtml], waitUntilFinished: true)
-        }
-    }
+           }
 
+    func createTread(_ urlString: String) {
+       var dataThread = dataThreads?.fetchObject(urlString)
+        if urlString != nil {
+            let fetchData = FetcherDataNetwork(urlString)
+            let parserHtml = ParserHTMLTag(lookingForText!, url: urlString)
+            parserHtml.addDependency(fetchData)
+            operationQueue?.addOperations([fetchData, parserHtml], waitUntilFinished: true)
+        }
+
+    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
        

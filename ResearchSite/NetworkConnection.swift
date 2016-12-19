@@ -19,21 +19,37 @@ enum IntParsingError: Error {
 
 class NetworkConnectionToSite: NSObject {
     var site: String?
+    private var networkActivityCount: Int = 0 {
+        didSet{
+            UIApplication.shared.isNetworkActivityIndicatorVisible = (networkActivityCount > 0)
+            
+        }
+    }
     var session: URLSession?
     var configuration: URLSessionConfiguration?
     var progressHandler = [URL: ProgressBlock]()
     
-    init(_ nameSite: String) {
+    init(_ nameSite: String, countConnection:Int) {
         self.site = nameSite
         super.init()
     configuration = URLSessionConfiguration.default
+        if countConnection < 5 {
+        configuration?.httpMaximumConnectionsPerHost = 5
+        } else {
+            configuration?.httpMaximumConnectionsPerHost = countConnection
+        }
+        // need change this value
         session = URLSession(configuration: configuration!)
+        let queue = session?.delegateQueue
+        queue?.maxConcurrentOperationCount = countConnection //need change this value
       
     }
     
     func getResultRequest(_ urlString: String, downloadProgressBlock: ProgressBlock?, completion: NetworkResolt?) -> URLSessionDataTask? {
         let url = createURL(urlString)
-        let task = session?.dataTask(with: url as URL) {(data, response, error) in
+        networkActivityCount += 1
+        let task = session?.dataTask(with: url as URL) { [unowned self] (data, response, error) in
+            self.networkActivityCount -= 1
             self.progressHandler[url as URL] = downloadProgressBlock
             if error != nil {
                 OperationQueue.main.addOperation {

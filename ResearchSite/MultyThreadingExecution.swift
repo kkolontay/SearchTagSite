@@ -65,24 +65,38 @@ extension MultyThreadingExecution {
 class FetcherDataNetwork: MultyThreadingExecution {
     var url: String?
     var networkConnection: NetworkConnectionToSite?
-    //var loadedData: String?
+    var progressLoaded: Float?
      var fetchedData: Data?
+   // var dataThread: DataThread?
+    var dataThreads: QueueDataThreads?
+
+    
     init(_ url: String) {
+       // self.dataThread = dataThread
+        dataThreads = QueueDataThreads()
         self.url =  url
-        networkConnection = NetworkConnectionToSite(url)
+        dataThreads?.setNewURL(url, url: url)
+        networkConnection = NetworkConnectionToSite(url, countConnection: 5)
         super.init()
     }
     override func main() {
-       
-       networkConnection?.getResultRequest(self.url!, downloadProgressBlock: nil, completion: {
+        self.dataThreads?.setStatus(url!, status: .uploading)
+
+        networkConnection?.getResultRequest(self.url!, downloadProgressBlock: {
+        [unowned self]    progress in
+            self.dataThreads?.setStatusLoaded(self.url!, loaded:  progress)
+        }, completion: {
          [unowned  self]   data, error in
             if error == nil, data != nil {
                    self.fetchedData = data as? Data
 //                self.loadedData = dataString
 //                print( self.loadedData! )
-                
+                self.dataThreads?.setStatusLoaded(self.url!, loaded:  1.0)
+                self.dataThreads?.setStatus(self.url!, status: .finished)
             }
             else {
+                self.dataThreads?.setError(self.url!, error:  "error \(error)")
+                 self.dataThreads?.setStatus(self.url!, status: .error)
                 print("error \(error)")
             }
         self.state = .Finished

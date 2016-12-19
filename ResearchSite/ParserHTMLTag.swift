@@ -13,8 +13,10 @@ class ParserHTMLTag: MultyThreadingExecution {
     var parser: TFHpple?
     var pattern: String?
     var regEx: Regex?
-     init(_ pattern: String)
+    var url: String?
+    init(_ pattern: String, url: String)
     {
+        self.url = url
         self.pattern = pattern
         self.regEx = Regex(self.pattern!)
         super.init()
@@ -42,7 +44,6 @@ class ParserHTMLTag: MultyThreadingExecution {
             for textBlock in searchText! {
                 if textBlock.content != nil {
                 countOfMatches += (regEx?.test(input: textBlock.content!))!
-                    print(textBlock.content)
                 }
             }
             print("MATCHES = \(countOfMatches)")
