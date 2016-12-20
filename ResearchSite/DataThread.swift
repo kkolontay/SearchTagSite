@@ -91,12 +91,13 @@ class QueueDataThreads {
         func fetchCoincidence(_ urlKey: String) -> Int {
           return  (quantityThread?[urlKey]?.quantityCoincidence)!
         }
-        
+        func setStatus(_ urlKey: String, status: ThreadStarus) {
+            quantityThread?[urlKey]?.status = status
+        }
         func setNewURL(_ urlKey: String, url: String) {
             if quantityThread?[urlKey] != nil {
                 if canOpenURL(string: url) && maxQuantityURL! > 0 {
                     quantityThread?[urlKey]?.listUrl?.append(url)
-                   // maxQuantityURL = maxQuantityURL! - 1
                 }
                 
             } else {
@@ -198,7 +199,7 @@ class QueueDataThreads {
     func setStatus(_ url: String, status: ThreadStarus) {
         
         concurrentQueue?.async(flags: .barrier) {
-            DataThreads.sharedInstance.quantityThread![url]?.status  = status
+            DataThreads.sharedInstance.setStatus(url, status: status)
         }
     }
     

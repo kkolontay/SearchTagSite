@@ -14,7 +14,8 @@ class ParserHTMLTag: MultyThreadingExecution {
     var pattern: String?
     var regEx: Regex?
     var url: String?
-    weak var dataThread: QueueDataThreads?
+    var dataThread: QueueDataThreads?
+    weak var delegate: SearchingFinishedDelegate?
     
     init(_ pattern: String, url: String)
     {
@@ -38,7 +39,7 @@ class ParserHTMLTag: MultyThreadingExecution {
                     let dictionaryAttributes = element.attributes
                     let href = dictionaryAttributes?["href"]
                     if href != nil {
-                        print("\(href!)")
+                        // print("\(href!)")
                         dataThread?.setNewURL(self.url!, url: href as! String)
                     }
                 }
@@ -47,11 +48,16 @@ class ParserHTMLTag: MultyThreadingExecution {
             let searchText =  parser?.search(withXPathQuery: "//div") as! [TFHppleElement]!
             for textBlock in searchText! {
                 if textBlock.content != nil {
-                countOfMatches += (regEx?.test(input: textBlock.content!))!
+                    countOfMatches += (regEx?.test(input: textBlock.content!))!
                 }
             }
             dataThread?.setCoincidence(self.url!, coincidence: countOfMatches)
+            print(self.url)
             print("MATCHES = \(countOfMatches)")
+            if delegate != nil {
+                delegate?.reloadDataTable(self.url!)
+            }
+            
         }
     }
     

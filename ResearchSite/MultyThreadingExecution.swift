@@ -68,7 +68,7 @@ class FetcherDataNetwork: MultyThreadingExecution {
     var progressLoaded: Float?
     var fetchedData: Data?
     // var dataThread: DataThread?
-    weak var dataThreads: QueueDataThreads?
+     var dataThreads: QueueDataThreads?
     
     init(_ url: String) {
         // self.dataThread = dataThread

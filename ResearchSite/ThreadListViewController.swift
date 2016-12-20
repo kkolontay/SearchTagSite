@@ -15,31 +15,43 @@ class ThreadListViewController: UIViewController {
     var lookingForText: String?
     var operationQueue: OperationQueue?
     var dataThreads: QueueDataThreads?
-
+    @IBOutlet weak var myTable: UITableView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         dataThreads = QueueDataThreads()
-         operationQueue = OperationQueue()
+        operationQueue = OperationQueue()
         if maximumThread != nil {
-        operationQueue?.maxConcurrentOperationCount = maximumThread!
+            operationQueue?.maxConcurrentOperationCount = 20000//maximumThread!
         } else {
             operationQueue?.maxConcurrentOperationCount = 1
         }
-           }
+      let block =   BlockOperation.init(block: {
+            self.createTread(self.urlString!)
+        })
+       
+        operationQueue?.addOperation(block)
+
+    }
+
+    deinit {
+    
+    }
 
     func createTread(_ urlString: String) {
-     //  var dataThread = dataThreads?.fetchObject(urlString)
-        if !urlString.isEmpty {
+        dataThreads?.setNewURL(urlString, url: urlString)
+             if !urlString.isEmpty {
             let fetchData = FetcherDataNetwork(urlString)
             let parserHtml = ParserHTMLTag(lookingForText!, url: urlString)
+            parserHtml.delegate = self
             parserHtml.addDependency(fetchData)
             operationQueue?.addOperations([fetchData, parserHtml], waitUntilFinished: true)
         }
-
+        
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-       
+        
     }
 }
 extension ThreadListViewController: UITableViewDataSource {
@@ -47,11 +59,33 @@ extension ThreadListViewController: UITableViewDataSource {
         return 1
     }
     
-       public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as UITableViewCell
         return cell
         
     }
-
     
+    
+}
+
+extension ThreadListViewController: SearchingFinishedDelegate {
+    func reloadDataTable(_ urlOld: String) {
+        let lastSearch = dataThreads?.fetchObject(urlOld)
+        if lastSearch?.listUrl?.count != 0 && lastSearch?.status == ThreadStarus.finished {
+            for itemUrl in (lastSearch?.listUrl)! {
+            if (dataThreads?.maxQuantityURL)! > 0 {
+                print("\(dataThreads?.maxQuantityURL)")
+                createTread(itemUrl)
+                print(itemUrl)
+                print("count of list \(lastSearch?.listUrl?.count)")
+            } else {
+                lastSearch?.listUrl = Array<String>()
+                return
+            }
+              lastSearch?.listUrl = Array<String>()
+        }
+        print("Hello, I'm finished")
+            myTable.reloadData()
+    }
+}
 }

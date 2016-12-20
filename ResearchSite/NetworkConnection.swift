@@ -34,9 +34,9 @@ class NetworkConnectionToSite: NSObject {
         super.init()
     configuration = URLSessionConfiguration.default
         if countConnection < 5 {
-        configuration?.httpMaximumConnectionsPerHost = 5
+       // configuration?.httpMaximumConnectionsPerHost = 5
         } else {
-            configuration?.httpMaximumConnectionsPerHost = countConnection
+      //      configuration?.httpMaximumConnectionsPerHost = countConnection < 13 ? countConnection: 12
         }
         // need change this value
         session = URLSession(configuration: configuration!)
@@ -68,12 +68,9 @@ class NetworkConnectionToSite: NSObject {
                         }
                         return
                     }
-                   // guard  let stringHTML = String(data: data!, encoding: .utf8) else {return}
-                   // OperationQueue.main.addOperation({
+                   
                         completion!(data as AnyObject?, nil)
-                        //print(stringHTML)
-                    //})
-                    
+                                      
                 }
             }
         }
