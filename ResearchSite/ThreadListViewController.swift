@@ -28,8 +28,8 @@ class ThreadListViewController: UIViewController {
            }
 
     func createTread(_ urlString: String) {
-       var dataThread = dataThreads?.fetchObject(urlString)
-        if urlString != nil {
+     //  var dataThread = dataThreads?.fetchObject(urlString)
+        if !urlString.isEmpty {
             let fetchData = FetcherDataNetwork(urlString)
             let parserHtml = ParserHTMLTag(lookingForText!, url: urlString)
             parserHtml.addDependency(fetchData)

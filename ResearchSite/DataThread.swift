@@ -84,11 +84,19 @@ class QueueDataThreads {
             let predicate = NSPredicate(format:"SELF MATCHES %@", argumentArray:[regEx])
             return predicate.evaluate(with: string)
         }
-
+        
+        func setCoincidence(_ urlKey: String, coincidence: Int) {
+             quantityThread?[urlKey]?.quantityCoincidence = coincidence
+        }
+        func fetchCoincidence(_ urlKey: String) -> Int {
+          return  (quantityThread?[urlKey]?.quantityCoincidence)!
+        }
+        
         func setNewURL(_ urlKey: String, url: String) {
             if quantityThread?[urlKey] != nil {
                 if canOpenURL(string: url) && maxQuantityURL! > 0 {
-                quantityThread?[urlKey]?.listUrl?.append(url)
+                    quantityThread?[urlKey]?.listUrl?.append(url)
+                   // maxQuantityURL = maxQuantityURL! - 1
                 }
                 
             } else {
@@ -105,7 +113,7 @@ class QueueDataThreads {
     init(){
         
         concurrentQueue = DispatchQueue(label: "com.research.site", attributes: .concurrent)
-    
+        
     }
     func fetchObject(_ url: String) -> DataThread? {
         var dataThread: DataThread?
@@ -136,6 +144,20 @@ class QueueDataThreads {
             }
         }
     }
+    func fetchConincidence(_ urlKey: String)  -> Int {
+        var item: Int?
+        concurrentQueue?.sync {
+        item = DataThreads.sharedInstance.fetchCoincidence(urlKey)
+        }
+        return item!
+    }
+    
+    func setCoincidence(_ urlKey: String, coincidence: Int) {
+        
+        concurrentQueue?.async(flags: .barrier) {
+            DataThreads.sharedInstance.setCoincidence(urlKey, coincidence: coincidence)
+        }
+    }
     func fetchError(_ url: String)  -> String {
         var error: String?
         concurrentQueue?.sync {
@@ -150,7 +172,7 @@ class QueueDataThreads {
         }
         return status!
     }
-
+    
     func fetchStatusLoaded(_ url: String)  -> Float {
         var statusLoaded: Float?
         concurrentQueue?.sync {
@@ -158,7 +180,7 @@ class QueueDataThreads {
         }
         return statusLoaded!
     }
-
+    
     func fetchNextURL(_ url: String)  -> Array<String> {
         var array: Array<String>?
         concurrentQueue?.sync {
@@ -166,17 +188,12 @@ class QueueDataThreads {
         }
         return array!
     }
-
-    
-    
-    
-    
     
     func setError(_ url: String, error: String) {
         concurrentQueue?.async(flags: .barrier) {
             DataThreads.sharedInstance.quantityThread![url]?.error = error
         }
-
+        
     }
     func setStatus(_ url: String, status: ThreadStarus) {
         
@@ -186,22 +203,19 @@ class QueueDataThreads {
     }
     
     
-        func setStatusLoaded(_ url: String, loaded: Float)  {
-       
-            concurrentQueue?.async(flags: .barrier) {
-             DataThreads.sharedInstance.quantityThread![url]?.persentOfLoaded = loaded
+    func setStatusLoaded(_ url: String, loaded: Float)  {
+        
+        concurrentQueue?.async(flags: .barrier) {
+            DataThreads.sharedInstance.quantityThread![url]?.persentOfLoaded = loaded
         }
-       
+        
     }
     
     func fetchNextURL(_ url: String, newUrl: String)  {
         concurrentQueue?.async (flags: .barrier){
-             DataThreads.sharedInstance.setNewURL(url, url: newUrl)
+            DataThreads.sharedInstance.setNewURL(url, url: newUrl)
         }
-            }
-
-    
-
+    }
     
     var maxQuantityURL: Int  { get {
         var temp = 0

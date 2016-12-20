@@ -14,7 +14,7 @@ import UIKit
 class MultyThreadingExecution: Operation {
     enum State: String {
         case Ready, Executing, Finished
-         var keyPath: String {
+        var keyPath: String {
             return "is" + rawValue
         }
     }
@@ -33,7 +33,7 @@ class MultyThreadingExecution: Operation {
     override func main() {
         state = .Executing
     }
-
+    
 }
 extension MultyThreadingExecution {
     override var isReady: Bool {
@@ -52,12 +52,12 @@ extension MultyThreadingExecution {
         if isCancelled {
             state = .Finished
             return
-    }
+        }
         main()
         state = .Executing
-}
+    }
     override func cancel() {
-         state = .Finished
+        state = .Finished
         
     }
 }
@@ -66,48 +66,47 @@ class FetcherDataNetwork: MultyThreadingExecution {
     var url: String?
     var networkConnection: NetworkConnectionToSite?
     var progressLoaded: Float?
-     var fetchedData: Data?
-   // var dataThread: DataThread?
-    var dataThreads: QueueDataThreads?
-
+    var fetchedData: Data?
+    // var dataThread: DataThread?
+    weak var dataThreads: QueueDataThreads?
     
     init(_ url: String) {
-       // self.dataThread = dataThread
+        // self.dataThread = dataThread
         dataThreads = QueueDataThreads()
         self.url =  url
         dataThreads?.setNewURL(url, url: url)
         networkConnection = NetworkConnectionToSite(url, countConnection: 5)
         super.init()
     }
+    
     override func main() {
         self.dataThreads?.setStatus(url!, status: .uploading)
-
-        networkConnection?.getResultRequest(self.url!, downloadProgressBlock: {
-        [unowned self]    progress in
-            self.dataThreads?.setStatusLoaded(self.url!, loaded:  progress)
-        }, completion: {
-         [unowned  self]   data, error in
-            if error == nil, data != nil {
-                   self.fetchedData = data as? Data
-//                self.loadedData = dataString
-//                print( self.loadedData! )
-                self.dataThreads?.setStatusLoaded(self.url!, loaded:  1.0)
-                self.dataThreads?.setStatus(self.url!, status: .finished)
-            }
-            else {
-                self.dataThreads?.setError(self.url!, error:  "error \(error)")
-                 self.dataThreads?.setStatus(self.url!, status: .error)
-                print("error \(error)")
-            }
-        self.state = .Finished
-                })?.resume()
-       //
+        if isCancelled == false {
+            networkConnection?.getResultRequest(self.url!, downloadProgressBlock: {
+                [unowned self]    progress in
+                self.dataThreads?.setStatusLoaded(self.url!, loaded:  progress)
+                }, completion: {
+                    [unowned  self]   data, error in
+                    if error == nil, data != nil {
+                        self.fetchedData = data as? Data
+                        self.dataThreads?.setStatusLoaded(self.url!, loaded:  1.0)
+                        self.dataThreads?.setStatus(self.url!, status: .finished)
+                    }
+                    else {
+                        self.dataThreads?.setError(self.url!, error:  "error \(error)")
+                        self.dataThreads?.setStatus(self.url!, status: .error)
+                        print("error \(error)")
+                    }
+                    self.state = .Finished
+            })?.resume()
+        }
     }
 }
+
 extension FetcherDataNetwork: DataProvider {
     var data: Data? {
-    
+        
         return self.fetchedData
-    
+        
     }
 }

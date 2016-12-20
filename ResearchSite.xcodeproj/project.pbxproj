@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		D00FF7361E032F050079E90E /* DataThread.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00FF7351E032F050079E90E /* DataThread.swift */; };
-		D00FF7381E0335120079E90E /* URLSnifer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00FF7371E0335120079E90E /* URLSnifer.swift */; };
 		D021CCC71E0347FC00940E7C /* TFHpple.m in Sources */ = {isa = PBXBuildFile; fileRef = D021CCC21E0347FC00940E7C /* TFHpple.m */; };
 		D021CCC81E0347FC00940E7C /* TFHppleElement.m in Sources */ = {isa = PBXBuildFile; fileRef = D021CCC41E0347FC00940E7C /* TFHppleElement.m */; };
 		D021CCC91E0347FC00940E7C /* XPathQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = D021CCC61E0347FC00940E7C /* XPathQuery.m */; };
@@ -30,7 +29,6 @@
 
 /* Begin PBXFileReference section */
 		D00FF7351E032F050079E90E /* DataThread.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataThread.swift; sourceTree = "<group>"; };
-		D00FF7371E0335120079E90E /* URLSnifer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLSnifer.swift; sourceTree = "<group>"; };
 		D021CCC11E0347FC00940E7C /* TFHpple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TFHpple.h; sourceTree = "<group>"; };
 		D021CCC21E0347FC00940E7C /* TFHpple.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TFHpple.m; sourceTree = "<group>"; };
 		D021CCC31E0347FC00940E7C /* TFHppleElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TFHppleElement.h; sourceTree = "<group>"; };
@@ -97,7 +95,6 @@
 				D021CCC01E0347FC00940E7C /* Classes */,
 				D00FF7351E032F050079E90E /* DataThread.swift */,
 				D0A41E841E0135CE0027A00C /* AlertController.swift */,
-				D00FF7371E0335120079E90E /* URLSnifer.swift */,
 				D021CCCF1E03ED5500940E7C /* MultyThreadingExecution.swift */,
 				D021CCD31E042C7D00940E7C /* DataProvider.swift */,
 				D021CCD51E0431E300940E7C /* ParserHTMLTag.swift */,
@@ -237,7 +234,6 @@
 				D021CCC91E0347FC00940E7C /* XPathQuery.m in Sources */,
 				D021CCC81E0347FC00940E7C /* TFHppleElement.m in Sources */,
 				D021CCC71E0347FC00940E7C /* TFHpple.m in Sources */,
-				D00FF7381E0335120079E90E /* URLSnifer.swift in Sources */,
 				D0F668C31E008F980018FEF5 /* ThreadCharacterTableViewCell.swift in Sources */,
 				D021CCD01E03ED5500940E7C /* MultyThreadingExecution.swift in Sources */,
 				D021CCD61E0431E300940E7C /* ParserHTMLTag.swift in Sources */,

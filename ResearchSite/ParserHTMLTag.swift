@@ -14,12 +14,15 @@ class ParserHTMLTag: MultyThreadingExecution {
     var pattern: String?
     var regEx: Regex?
     var url: String?
+    weak var dataThread: QueueDataThreads?
+    
     init(_ pattern: String, url: String)
     {
         self.url = url
         self.pattern = pattern
         self.regEx = Regex(self.pattern!)
         super.init()
+        dataThread = QueueDataThreads()
         
         
         
@@ -36,6 +39,7 @@ class ParserHTMLTag: MultyThreadingExecution {
                     let href = dictionaryAttributes?["href"]
                     if href != nil {
                         print("\(href!)")
+                        dataThread?.setNewURL(self.url!, url: href as! String)
                     }
                 }
             }
@@ -46,6 +50,7 @@ class ParserHTMLTag: MultyThreadingExecution {
                 countOfMatches += (regEx?.test(input: textBlock.content!))!
                 }
             }
+            dataThread?.setCoincidence(self.url!, coincidence: countOfMatches)
             print("MATCHES = \(countOfMatches)")
         }
     }
