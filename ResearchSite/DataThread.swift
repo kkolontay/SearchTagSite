@@ -18,12 +18,18 @@ enum ThreadStarus: String{
 }
 
 class DataThread {
-    init(_ url: String, status: ThreadStarus, quantitiCoincidence: Int, error: String?, listUrl: Array<String>) {
+    init(_ url: String, status: ThreadStarus, quantitiCoincidence: Int, error: String?, listUrl: Array<String>, parser: ParserHTMLTag?, provider: FetcherDataNetwork?) {
         self.url = url
         self.status = status
         self.quantityCoincidence = quantitiCoincidence
         self.error = error
         self.listUrl = Array<String>()
+        if parser != nil {
+            self.parser = parser
+        }
+        if provider != nil {
+            self.provider = provider
+        }
     }
     
     var url: String = ""
@@ -32,82 +38,87 @@ class DataThread {
     var error: String?
     var listUrl: Array<String>?
     var persentOfLoaded: Float = 0.0
+    var parser: ParserHTMLTag?
+    var provider: FetcherDataNetwork?
 }
 
 // dictionary keys ("url", "countofstring", "error", "starus", "dictionary"
 
 
-class QueueDataThreads {
+class DataThreads: NSObject {
+    var quantityThread: Dictionary<String, DataThread>?
     
-    private class DataThreads: NSObject {
-        var quantityThread: Dictionary<String, DataThread>?
-        
-        private var maxQuantityThread: Int?
-        private  var maxQuantityURL: Int?
-        
-        var quantityThreadSet: Int {
-            set {
-                maxQuantityThread = newValue
-            }
-            get {
-                return maxQuantityThread!
+    private var maxQuantityThread: Int?
+    private  var maxQuantityURL: Int?
+    
+    var quantityThreadSet: Int {
+        set {
+            maxQuantityThread = newValue
+        }
+        get {
+            return maxQuantityThread!
+        }
+    }
+    
+    var quantityURL: Int {
+        set {
+            if newValue >= 0 {
+                maxQuantityURL = newValue
             }
         }
-        
-        var quantityURL: Int {
-            set {
-                if newValue >= 0 {
-                    maxQuantityURL = newValue
-                }
-            }
-            get {
-                return maxQuantityURL!
-            }
+        get {
+            return maxQuantityURL!
         }
+    }
+    
+    static let sharedInstance: DataThreads = {
+        let instance = DataThreads()
         
-        static let sharedInstance: DataThreads = {
-            let instance = DataThreads()
+        return instance
+    }()
+    
+    private override init() {
+        super.init()
+        quantityThread = Dictionary<String, DataThread>()
+        maxQuantityThread = 1
+        maxQuantityURL = 1
+    }
+    
+    func canOpenURL(string: String?) -> Bool {
+        
+        let regEx = "((http|https)://)?((\\w)*|([0-9]*)|([-|_])*)+([\\.|/]((\\w)*|([0-9]*)|([-|_])*))+"
+        let predicate = NSPredicate(format:"SELF MATCHES %@", argumentArray:[regEx])
+        return predicate.evaluate(with: string)
+    }
+    
+    func setCoincidence(_ urlKey: String, coincidence: Int) {
+        quantityThread?[urlKey]?.quantityCoincidence = coincidence
+    }
+    func fetchCoincidence(_ urlKey: String) -> Int {
+        return  (quantityThread?[urlKey]?.quantityCoincidence)!
+    }
+    func setStatus(_ urlKey: String, status: ThreadStarus) {
+        quantityThread?[urlKey]?.status = status
+    }
+    func setNewURL(_ urlKey: String, url: String) {
+        if quantityThread?[urlKey] != nil {
+            if canOpenURL(string: url) && maxQuantityURL! > 0 {
+                quantityThread?[urlKey]?.listUrl?.append(url)
+            }
             
-            return instance
-        }()
-        
-        private override init() {
-            super.init()
-            quantityThread = Dictionary<String, DataThread>()
-            maxQuantityThread = 1
-            maxQuantityURL = 1
-        }
-        
-        func canOpenURL(string: String?) -> Bool {
-            
-            let regEx = "((http|https)://)?((\\w)*|([0-9]*)|([-|_])*)+([\\.|/]((\\w)*|([0-9]*)|([-|_])*))+"
-            let predicate = NSPredicate(format:"SELF MATCHES %@", argumentArray:[regEx])
-            return predicate.evaluate(with: string)
-        }
-        
-        func setCoincidence(_ urlKey: String, coincidence: Int) {
-             quantityThread?[urlKey]?.quantityCoincidence = coincidence
-        }
-        func fetchCoincidence(_ urlKey: String) -> Int {
-          return  (quantityThread?[urlKey]?.quantityCoincidence)!
-        }
-        func setStatus(_ urlKey: String, status: ThreadStarus) {
-            quantityThread?[urlKey]?.status = status
-        }
-        func setNewURL(_ urlKey: String, url: String) {
-            if quantityThread?[urlKey] != nil {
-                if canOpenURL(string: url) && maxQuantityURL! > 0 {
-                    quantityThread?[urlKey]?.listUrl?.append(url)
-                }
-                
-            } else {
-                if maxQuantityURL! > 0 {
-                    quantityThread?[urlKey] = DataThread(url, status: .ready, quantitiCoincidence: 0, error: nil,listUrl: Array<String>())
-                    maxQuantityURL = maxQuantityURL! - 1
-                }
+        } else {
+            if maxQuantityURL! > 0 {
+                quantityThread?[urlKey] = DataThread(url, status: .ready, quantitiCoincidence: 0, error: nil,listUrl: Array<String>(), parser: nil, provider: nil)
+                maxQuantityURL = maxQuantityURL! - 1
             }
         }
     }
+}
+
+
+
+class QueueDataThreads {
+    
     
     var concurrentQueue:DispatchQueue?
     
@@ -193,6 +204,20 @@ class QueueDataThreads {
     func setError(_ url: String, error: String) {
         concurrentQueue?.async(flags: .barrier) {
             DataThreads.sharedInstance.quantityThread![url]?.error = error
+        }
+        
+    }
+    
+    
+    func setParser(_ url: String, parser: ParserHTMLTag?) {
+        concurrentQueue?.async(flags: .barrier) {
+            DataThreads.sharedInstance.quantityThread![url]?.parser = parser
+        }
+        
+    }
+    func setProvider(_ url: String, provider: FetcherDataNetwork?) {
+        concurrentQueue?.async(flags: .barrier) {
+            DataThreads.sharedInstance.quantityThread![url]?.provider = provider
         }
         
     }

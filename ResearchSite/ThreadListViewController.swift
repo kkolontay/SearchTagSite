@@ -22,7 +22,7 @@ class ThreadListViewController: UIViewController {
         dataThreads = QueueDataThreads()
         operationQueue = OperationQueue()
         if maximumThread != nil {
-            operationQueue?.maxConcurrentOperationCount = 20000//maximumThread!
+            operationQueue?.maxConcurrentOperationCount = maximumThread!
         } else {
             operationQueue?.maxConcurrentOperationCount = 1
         }
@@ -34,15 +34,19 @@ class ThreadListViewController: UIViewController {
 
     }
 
-    deinit {
-    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        operationQueue?.cancelAllOperations()
+        DataThreads.sharedInstance.quantityThread = Dictionary<String, DataThread>()
     }
 
     func createTread(_ urlString: String) {
         dataThreads?.setNewURL(urlString, url: urlString)
              if !urlString.isEmpty {
             let fetchData = FetcherDataNetwork(urlString)
+                dataThreads?.setProvider(urlString, provider: fetchData)
             let parserHtml = ParserHTMLTag(lookingForText!, url: urlString)
+                dataThreads?.setParser(urlString, parser: parserHtml)
             parserHtml.delegate = self
             parserHtml.addDependency(fetchData)
             operationQueue?.addOperations([fetchData, parserHtml], waitUntilFinished: true)
@@ -64,7 +68,10 @@ extension ThreadListViewController: UITableViewDataSource {
         return cell
         
     }
-    
+    override func viewDidDisappear(_ animated: Bool) {
+        operationQueue?.cancelAllOperations()
+        super.viewWillDisappear(animated)
+    }
     
 }
 
@@ -72,19 +79,24 @@ extension ThreadListViewController: SearchingFinishedDelegate {
     func reloadDataTable(_ urlOld: String) {
         let lastSearch = dataThreads?.fetchObject(urlOld)
         if lastSearch?.listUrl?.count != 0 && lastSearch?.status == ThreadStarus.finished {
+            guard lastSearch?.listUrl != nil else {return}
             for itemUrl in (lastSearch?.listUrl)! {
             if (dataThreads?.maxQuantityURL)! > 0 {
                 print("\(dataThreads?.maxQuantityURL)")
-                createTread(itemUrl)
+                operationQueue?.addOperation {
+                self.createTread(itemUrl)
+               }
                 print(itemUrl)
                 print("count of list \(lastSearch?.listUrl?.count)")
             } else {
-                lastSearch?.listUrl = Array<String>()
+                //lastSearch?.listUrl = Array<String>()
                 return
             }
-              lastSearch?.listUrl = Array<String>()
+             // lastSearch?.listUrl = Array<String>()
         }
         print("Hello, I'm finished")
+            dataThreads?.setParser(urlOld, parser: nil)
+            dataThreads?.setProvider(urlOld, provider: nil)
             myTable.reloadData()
     }
 }

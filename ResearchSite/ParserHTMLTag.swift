@@ -55,10 +55,15 @@ class ParserHTMLTag: MultyThreadingExecution {
             print(self.url)
             print("MATCHES = \(countOfMatches)")
             if delegate != nil {
-                delegate?.reloadDataTable(self.url!)
+              //OperationQueue.main.addOperation {
+                     self.delegate?.reloadDataTable(self.url!)
+              //  }
+               
             }
             
         }
+        self.state = .Finished
+        self.cancel()
     }
     
 }

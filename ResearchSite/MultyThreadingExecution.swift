@@ -98,6 +98,7 @@ class FetcherDataNetwork: MultyThreadingExecution {
                         print("error \(error)")
                     }
                     self.state = .Finished
+                   self.cancel()
             })?.resume()
         }
     }
