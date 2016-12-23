@@ -67,7 +67,7 @@ class InputConditionViewController: UIViewController, UITextFieldDelegate{
         quantityThread = 1
         maxReferences = 1
         if  quantityThreadTextField.text?.isEmpty == false , let quantityThreadTemp = Int(quantityThreadTextField.text!)   {
-            if quantityThreadTemp > 0 && quantityThreadTemp < 14 {
+            if quantityThreadTemp > 0 && quantityThreadTemp < 100 {
                 quantityThread = quantityThreadTemp
             }
         }

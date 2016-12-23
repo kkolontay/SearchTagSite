@@ -52,7 +52,7 @@ class ParserHTMLTag: MultyThreadingExecution {
                 }
             }
             dataThread?.setCoincidence(self.url!, coincidence: countOfMatches)
-            print(self.url)
+            //print(self.url ?? <#default value#>)
             print("MATCHES = \(countOfMatches)")
             if delegate != nil {
               //OperationQueue.main.addOperation {

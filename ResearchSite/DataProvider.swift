@@ -11,6 +11,11 @@ import UIKit
 protocol DataProvider: class {
     var data: Data? {get}
 }
+
 protocol SearchingFinishedDelegate: class {
     func reloadDataTable(_ url: String)
+}
+
+protocol FetchProgressLoading: class {
+    func loadingData(progress: Float)
 }

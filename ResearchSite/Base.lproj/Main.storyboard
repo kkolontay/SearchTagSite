@@ -85,7 +85,7 @@
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="URL"/>
                                             </textField>
-                                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="13" borderStyle="roundedRect" placeholder="1 - 13" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="m3t-et-4ld">
+                                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="99" borderStyle="roundedRect" placeholder="1 - 99" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="m3t-et-4ld">
                                                 <rect key="frame" x="8" y="120" width="304" height="30"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="30" id="5ks-lo-Lbt"/>
@@ -194,7 +194,7 @@
                                 <rect key="frame" x="16" y="0.0" width="288" height="416"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="cell" id="Tqv-Bu-d79" customClass="ThreadCaracterTableViewCell" customModule="ResearchSite" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationWidth="0.0" reuseIdentifier="cell" id="Tqv-Bu-d79" customClass="ThreadCharacterTableViewCell" customModule="ResearchSite" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="288" height="88"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Tqv-Bu-d79" id="Mw1-M7-nre">
@@ -223,14 +223,25 @@
                                                         <constraint firstAttribute="width" constant="40" id="JiH-i2-nyM"/>
                                                     </constraints>
                                                     <state key="normal" title="Button"/>
+                                                    <connections>
+                                                        <action selector="errorButtonPressed:" destination="Tqv-Bu-d79" eventType="touchUpInside" id="qxj-1g-4S5"/>
+                                                    </connections>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hgZ-3K-MM9">
                                                     <rect key="frame" x="218" y="29" width="55" height="30"/>
                                                     <state key="normal" title="Pause"/>
                                                 </button>
-                                                <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="ygn-2C-Tan">
+                                                <progressView hidden="YES" opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="ygn-2C-Tan">
                                                     <rect key="frame" x="8" y="75" width="158" height="2"/>
                                                 </progressView>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lfw-qt-UHC">
+                                                    <rect key="frame" x="218" y="29" width="55" height="30"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <state key="normal" title="Pause"/>
+                                                    <connections>
+                                                        <action selector="stopPlayButtonPressed:" destination="Tqv-Bu-d79" eventType="touchUpInside" id="EOD-qf-Q1J"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="ygn-2C-Tan" firstAttribute="leading" secondItem="Mw1-M7-nre" secondAttribute="leadingMargin" id="2S3-K8-rQW"/>
@@ -252,6 +263,13 @@
                                         <constraints>
                                             <constraint firstItem="hgZ-3K-MM9" firstAttribute="centerY" secondItem="Tqv-Bu-d79" secondAttribute="centerY" id="9O1-f7-ydb"/>
                                         </constraints>
+                                        <connections>
+                                            <outlet property="countCoincidenceLabel" destination="T4d-6c-HYv" id="HYm-Cx-6x0"/>
+                                            <outlet property="errorButton" destination="6s7-uy-7pw" id="8KV-y1-5Hs"/>
+                                            <outlet property="progerssView" destination="ygn-2C-Tan" id="wGB-2U-e7W"/>
+                                            <outlet property="stopPlayThreadButton" destination="hgZ-3K-MM9" id="rax-Ul-tmA"/>
+                                            <outlet property="urlLabel" destination="Bo1-c3-dB8" id="KhX-uz-zkO"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                                 <sections/>

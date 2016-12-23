@@ -103,6 +103,9 @@ class DataThreads: NSObject {
     func setNewURL(_ urlKey: String, url: String) {
         if quantityThread?[urlKey] != nil {
             if canOpenURL(string: url) && maxQuantityURL! > 0 {
+                guard let arrayOfURL = quantityThread?[urlKey]?.listUrl else {
+                    return
+                }
                 quantityThread?[urlKey]?.listUrl?.append(url)
             }
             
@@ -127,6 +130,16 @@ class QueueDataThreads {
         concurrentQueue = DispatchQueue(label: "com.research.site", attributes: .concurrent)
         
     }
+    
+       
+    func fetchDictionary() -> Dictionary<String, DataThread>? {
+        var dictionary: Dictionary<String, DataThread>?
+        concurrentQueue?.sync {
+            dictionary = DataThreads.sharedInstance.quantityThread
+        }
+        return dictionary
+    }
+    
     func fetchObject(_ url: String) -> DataThread? {
         var dataThread: DataThread?
         concurrentQueue?.sync {
@@ -156,6 +169,7 @@ class QueueDataThreads {
             }
         }
     }
+    
     func fetchConincidence(_ urlKey: String)  -> Int {
         var item: Int?
         concurrentQueue?.sync {
@@ -170,6 +184,7 @@ class QueueDataThreads {
             DataThreads.sharedInstance.setCoincidence(urlKey, coincidence: coincidence)
         }
     }
+    
     func fetchError(_ url: String)  -> String {
         var error: String?
         concurrentQueue?.sync {
@@ -177,6 +192,7 @@ class QueueDataThreads {
         }
         return error!
     }
+    
     func fetchStatus(_ url: String)  -> ThreadStarus {
         var status: ThreadStarus?
         concurrentQueue?.sync {
@@ -215,19 +231,20 @@ class QueueDataThreads {
         }
         
     }
+    
     func setProvider(_ url: String, provider: FetcherDataNetwork?) {
         concurrentQueue?.async(flags: .barrier) {
             DataThreads.sharedInstance.quantityThread![url]?.provider = provider
         }
         
     }
+    
     func setStatus(_ url: String, status: ThreadStarus) {
         
         concurrentQueue?.async(flags: .barrier) {
             DataThreads.sharedInstance.setStatus(url, status: status)
         }
     }
-    
     
     func setStatusLoaded(_ url: String, loaded: Float)  {
         
@@ -237,11 +254,6 @@ class QueueDataThreads {
         
     }
     
-    func fetchNextURL(_ url: String, newUrl: String)  {
-        concurrentQueue?.async (flags: .barrier){
-            DataThreads.sharedInstance.setNewURL(url, url: newUrl)
-        }
-    }
     
     var maxQuantityURL: Int  { get {
         var temp = 0

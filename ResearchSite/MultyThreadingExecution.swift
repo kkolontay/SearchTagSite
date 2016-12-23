@@ -67,6 +67,7 @@ class FetcherDataNetwork: MultyThreadingExecution {
     var networkConnection: NetworkConnectionToSite?
     var progressLoaded: Float?
     var fetchedData: Data?
+    weak var delegate: FetchProgressLoading?
     // var dataThread: DataThread?
      var dataThreads: QueueDataThreads?
     
@@ -85,6 +86,11 @@ class FetcherDataNetwork: MultyThreadingExecution {
             networkConnection?.getResultRequest(self.url!, downloadProgressBlock: {
                 [unowned self]    progress in
                 self.dataThreads?.setStatusLoaded(self.url!, loaded:  progress)
+                OperationQueue.main.addOperation {
+                    if self.delegate != nil {
+                        self.delegate?.loadingData(progress: progress)
+                    }
+                }
                 }, completion: {
                     [unowned  self]   data, error in
                     if error == nil, data != nil {
@@ -95,7 +101,10 @@ class FetcherDataNetwork: MultyThreadingExecution {
                     else {
                         self.dataThreads?.setError(self.url!, error:  "error \(error)")
                         self.dataThreads?.setStatus(self.url!, status: .error)
+                        self.state = .Finished
+                        self.cancel()
                         print("error \(error)")
+                        return
                     }
                     self.state = .Finished
                    self.cancel()
