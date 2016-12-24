@@ -13,7 +13,7 @@ import UIKit
 
 class MultyThreadingExecution: Operation {
     enum State: String {
-        case Ready, Executing, Finished
+        case Ready, Executing, Finished, Cancelled
         var keyPath: String {
             return "is" + rawValue
         }
@@ -28,6 +28,7 @@ class MultyThreadingExecution: Operation {
             didChangeValue(forKey: oldValue.keyPath)
             didChangeValue(forKey: state.keyPath)
         }
+        
     }
     
     override func main() {
@@ -47,6 +48,9 @@ extension MultyThreadingExecution {
     }
     override var isAsynchronous: Bool {
         return true
+    }
+    override var isCancelled: Bool {
+        return state == .Cancelled
     }
     override func start() {
         if isCancelled {
@@ -78,6 +82,7 @@ class FetcherDataNetwork: MultyThreadingExecution {
         dataThreads?.setNewURL(url, url: url)
         networkConnection = NetworkConnectionToSite(url, countConnection: 5)
         super.init()
+        //start()
     }
     
     override func main() {

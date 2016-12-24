@@ -24,7 +24,7 @@ class ParserHTMLTag: MultyThreadingExecution {
         self.regEx = Regex(self.pattern!)
         super.init()
         dataThread = QueueDataThreads()
-        
+        //start()
         
         
     }
@@ -32,7 +32,11 @@ class ParserHTMLTag: MultyThreadingExecution {
         if let dependencie = dependencies.filter({ $0 is DataProvider}).first as? DataProvider, fetchedData == .none {
             self.fetchedData = dependencie.data
         }
-        if isCancelled == false {
+      if isCancelled == true {
+        self.state = .Finished
+        dataThread?.setStatus(url!, status: .finished)
+           return
+       }
             parser = TFHpple(htmlData: self.fetchedData)
             if let elements =  parser?.search(withXPathQuery: "//a") as! [TFHppleElement]! {
                 for  element in elements {
@@ -43,7 +47,12 @@ class ParserHTMLTag: MultyThreadingExecution {
                         dataThread?.setNewURL(self.url!, url: href as! String)
                     }
                 }
-            }
+            
+                if isCancelled == true {
+                    self.state = .Finished
+                    dataThread?.setStatus(url!, status: .finished)
+                    return
+                }
             var countOfMatches = 0
             let searchText =  parser?.search(withXPathQuery: "//div") as! [TFHppleElement]!
             for textBlock in searchText! {
@@ -55,13 +64,14 @@ class ParserHTMLTag: MultyThreadingExecution {
             //print(self.url ?? <#default value#>)
             print("MATCHES = \(countOfMatches)")
             if delegate != nil {
-              //OperationQueue.main.addOperation {
+              OperationQueue.main.addOperation {
                      self.delegate?.reloadDataTable(self.url!)
-              //  }
+                }
                
             }
             
         }
+        dataThread?.setStatus(url!, status: .finished)
         self.state = .Finished
         self.cancel()
     }

@@ -39,7 +39,7 @@ class NetworkConnectionToSite: NSObject {
             configuration?.httpMaximumConnectionsPerHost = countConnection < 13 ? countConnection: 12
         }
         // need change this value
-        session = URLSession(configuration: configuration!, delegate: self, delegateQueue: OperationQueue.main)
+        session = URLSession(configuration: configuration!, delegate: self, delegateQueue: nil)
         let queue = session?.delegateQueue
         queue?.maxConcurrentOperationCount = countConnection //need change this value
       

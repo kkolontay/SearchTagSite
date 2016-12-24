@@ -103,10 +103,10 @@ class DataThreads: NSObject {
     func setNewURL(_ urlKey: String, url: String) {
         if quantityThread?[urlKey] != nil {
             if canOpenURL(string: url) && maxQuantityURL! > 0 {
-                guard let arrayOfURL = quantityThread?[urlKey]?.listUrl else {
-                    return
-                }
+
+                if quantityThread?[urlKey]?.listUrl?.contains(url) == false {
                 quantityThread?[urlKey]?.listUrl?.append(url)
+                }
             }
             
         } else {

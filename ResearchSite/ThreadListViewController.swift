@@ -32,8 +32,9 @@ class ThreadListViewController: UIViewController {
         let block =   BlockOperation.init(block: {
             self.createTread(self.urlString!)
         })
-        
+        if !block.isExecuting {
         operationQueue?.addOperation(block)
+        }
         
     }
     
@@ -52,7 +53,9 @@ class ThreadListViewController: UIViewController {
             dataThreads?.setParser(urlString, parser: parserHtml)
             parserHtml.delegate = self
             parserHtml.addDependency(fetchData)
+            if !fetchData.isExecuting && !parserHtml.isExecuting {
             operationQueue?.addOperations([fetchData, parserHtml], waitUntilFinished: true)
+            }
         }
         
     }
@@ -107,7 +110,8 @@ extension ThreadListViewController: SearchingFinishedDelegate {
             for itemUrl in (lastSearch?.listUrl)! {
                 if (dataThreads?.maxQuantityURL)! > 0 {
                     print("qqqqqq\((dataThreads?.maxQuantityURL)!)")
-                    operationQueue?.addOperation {
+                    OperationQueue.main.addOperation {
+                    
                         self.createTread(itemUrl)
                     }
                     print(itemUrl)
