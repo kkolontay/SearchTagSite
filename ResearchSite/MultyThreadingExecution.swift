@@ -68,7 +68,7 @@ extension MultyThreadingExecution {
 
 class FetcherDataNetwork: MultyThreadingExecution {
     var url: String?
-    var networkConnection: NetworkConnectionToSite?
+   weak var networkConnection: NetworkConnectionToSite?
     var progressLoaded: Float?
     var fetchedData: Data?
     weak var delegate: FetchProgressLoading?
@@ -80,7 +80,7 @@ class FetcherDataNetwork: MultyThreadingExecution {
         dataThreads = QueueDataThreads()
         self.url =  url
         dataThreads?.setNewURL(url, url: url)
-        networkConnection = NetworkConnectionToSite(url, countConnection: 5)
+        networkConnection = NetworkConnectionToSite(url, countConnection: 22)
         super.init()
         //start()
     }
@@ -113,7 +113,7 @@ class FetcherDataNetwork: MultyThreadingExecution {
                     }
                     self.state = .Finished
                    self.cancel()
-            })?.resume()
+            })
         }
     }
 }

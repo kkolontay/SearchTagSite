@@ -103,7 +103,7 @@
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no"/>
                                             </textField>
-                                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="499" borderStyle="roundedRect" placeholder="1 - 499" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="xMl-85-f8L">
+                                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="99" borderStyle="roundedRect" placeholder="1 - 499" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="xMl-85-f8L">
                                                 <rect key="frame" x="8" y="262" width="304" height="30"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="30" id="1jv-he-uZS"/>
@@ -226,7 +226,7 @@
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hgZ-3K-MM9">
                                                     <rect key="frame" x="229" y="44" width="51" height="30"/>
-                                                    <state key="normal" title="Pause"/>
+                                                    <state key="normal" title="Cтоп"/>
                                                     <connections>
                                                         <action selector="pausePlayButtonPressed:" destination="Tqv-Bu-d79" eventType="touchUpInside" id="QAu-yS-h5c"/>
                                                     </connections>

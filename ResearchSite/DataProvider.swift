@@ -19,3 +19,4 @@ protocol SearchingFinishedDelegate: class {
 protocol FetchProgressLoading: class {
     func loadingData(progress: Float)
 }
+

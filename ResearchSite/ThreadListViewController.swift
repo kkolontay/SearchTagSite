@@ -54,7 +54,6 @@ class ThreadListViewController: UIViewController {
             operationQueue?.addOperations([fetchData, parserHtml], waitUntilFinished: false)
             }
         }
-        
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -75,7 +74,7 @@ extension ThreadListViewController: UITableViewDataSource {
             for key in (self.dataThreads?.fetchDictionary()?.keys)! {
                 keyArray.append(key)
             }
-            
+        if(keyArray.count > index){
             url = keyArray[index]
             let data = self.dataThreads?.fetchObject(url!)
             DispatchQueue.main.async {
@@ -83,6 +82,7 @@ extension ThreadListViewController: UITableViewDataSource {
                     cell.setDataToCell(data: data!, controller: self)
                 }
             }
+        }
         
             return cell
     }
@@ -111,7 +111,10 @@ extension ThreadListViewController: SearchingFinishedDelegate {
                     print(itemUrl)
                     print("count of list \(lastSearch?.listUrl?.count)")
                 } else {
-                  
+                    OperationQueue.main.addOperation {
+                        self.myTable.reloadData()
+                    }
+
                     return
                 }
             }
@@ -119,7 +122,6 @@ extension ThreadListViewController: SearchingFinishedDelegate {
             dataThreads?.setProvider(urlOld, provider: nil)
             OperationQueue.main.addOperation {
                 self.myTable.reloadData()
-                
             }
         }
     }

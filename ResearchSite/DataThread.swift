@@ -19,7 +19,7 @@ enum ThreadStatus: String{
         switch self {
         case .error:
             return "Ошибка"
-        
+            
         case .finished:
             return "Завершен"
             
@@ -32,7 +32,7 @@ enum ThreadStatus: String{
         case .ready:
             return "Готов"
             
-        
+            
         }
     }
 }
@@ -126,9 +126,9 @@ class DataThreads: NSObject {
     func setNewURL(_ urlKey: String, url: String) {
         if quantityThread?[urlKey] != nil {
             if canOpenURL(string: url) && maxQuantityURL! > 0 {
-
-                if quantityThread?[urlKey]?.listUrl?.contains(url) == false {
-                quantityThread?[urlKey]?.listUrl?.append(url)
+                
+                if quantityThread?[urlKey]?.listUrl?.contains(url) == false && quantityThread?[urlKey] != nil && quantityThread != nil {
+                    quantityThread?[urlKey]?.listUrl?.append(url)
                 }
             }
             
@@ -155,7 +155,7 @@ class QueueDataThreads {
         
     }
     
-       
+    
     func fetchDictionary() -> Dictionary<String, DataThread>? {
         var dictionary: Dictionary<String, DataThread>?
         concurrentQueue?.sync {
@@ -197,7 +197,7 @@ class QueueDataThreads {
     func fetchConincidence(_ urlKey: String)  -> Int {
         var item: Int?
         concurrentQueue?.sync {
-        item = DataThreads.sharedInstance.fetchCoincidence(urlKey)
+            item = DataThreads.sharedInstance.fetchCoincidence(urlKey)
         }
         return item!
     }
@@ -255,7 +255,23 @@ class QueueDataThreads {
         }
         
     }
+    func fetchProvider(_ url: String)  -> FetcherDataNetwork? {
+        var provider: FetcherDataNetwork?
+        concurrentQueue?.sync {
+            provider = DataThreads.sharedInstance.quantityThread?[url]?.provider
+        }
+        return provider
+    }
     
+    func fetchParser(_ url: String) -> ParserHTMLTag? {
+        
+            var parser: ParserHTMLTag?
+            concurrentQueue?.sync {
+                parser = DataThreads.sharedInstance.quantityThread?[url]?.parser
+            }
+            return parser
+    
+    }
     func setProvider(_ url: String, provider: FetcherDataNetwork?) {
         concurrentQueue?.async(flags: .barrier) {
             DataThreads.sharedInstance.quantityThread![url]?.provider = provider

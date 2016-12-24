@@ -16,10 +16,14 @@ class ThreadCharacterTableViewCell: UITableViewCell {
     @IBOutlet weak var errorButton: UIButton!
     @IBOutlet weak var countCoincidenceLabel: UILabel!
     var dataThread: DataThread?
+    var queueData: QueueDataThreads?
     weak var controller: UIViewController?
+    var isStop: Bool?
     var url: String?
     override func awakeFromNib() {
         super.awakeFromNib()
+        isStop = true
+        queueData = QueueDataThreads()
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -28,11 +32,27 @@ class ThreadCharacterTableViewCell: UITableViewCell {
         
     }
     @IBAction func errorButtonPressed(_ sender: Any) {
-        _ = AlertController(controller!, error: (dataThread?.error)!)
+        _ = AlertController(controller!, error: (dataThread?.error!)!)
         
     }
     
     @IBAction func pausePlayButtonPressed(_ sender: Any) {
+        isStop = !isStop!
+        if isStop == false {
+            stopPlayThreadButton.setTitle("Старт", for: .normal)
+            if dataThread?.provider != nil {
+                dataThread?.provider?.cancel()
+                dataThread?.provider = nil
+                dataThread?.parser?.cancel()
+                dataThread?.parser = nil
+            }
+            
+        } else {
+            stopPlayThreadButton.setTitle("Стоп", for: .normal)
+            if let mainController = controller as? ThreadListViewController {
+                mainController.createTread(self.url!)
+            }
+        }
     }
     func setDataToCell(data: DataThread, controller: UIViewController){
         self.controller = controller

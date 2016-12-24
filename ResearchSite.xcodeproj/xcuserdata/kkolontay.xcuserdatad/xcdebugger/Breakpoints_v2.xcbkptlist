@@ -40,11 +40,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ResearchSite/NetworkConnection.swift"
-            timestampString = "504284636.721472"
+            timestampString = "504305550.388022"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "98"
-            endingLineNumber = "98"
+            startingLineNumber = "95"
+            endingLineNumber = "95"
             landmarkName = "urlSession(_:downloadTask:didWriteData:totalBytesWritten:totalBytesExpectedToWrite:)"
             landmarkType = "7">
             <Locations>
@@ -56,11 +56,11 @@
                   moduleName = "ResearchSite"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/kkolontay/SearchTagSite/ResearchSite/NetworkConnection.swift"
-                  timestampString = "504296418.465625"
+                  timestampString = "504305811.028443"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "98"
-                  endingLineNumber = "98"
+                  startingLineNumber = "95"
+                  endingLineNumber = "95"
                   offsetFromSymbolStart = "35">
                </Location>
                <Location
@@ -71,11 +71,11 @@
                   moduleName = "ResearchSite"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/kkolontay/SearchTagSite/ResearchSite/NetworkConnection.swift"
-                  timestampString = "504296418.467186"
+                  timestampString = "504305811.029754"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "98"
-                  endingLineNumber = "98"
+                  startingLineNumber = "95"
+                  endingLineNumber = "95"
                   offsetFromSymbolStart = "315">
                </Location>
             </Locations>
@@ -84,11 +84,11 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "No"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ResearchSite/NetworkConnection.swift"
-            timestampString = "504284636.721472"
+            timestampString = "504305550.388022"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "75"
@@ -104,7 +104,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ResearchSite/ThreadListViewController.swift"
-            timestampString = "504296067.95181"
+            timestampString = "504297029.162038"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "108"
@@ -136,13 +136,193 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ResearchSite/ThreadCharacterTableViewCell.swift"
-            timestampString = "504296392.398323"
+            timestampString = "504308223.049311"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "63"
-            endingLineNumber = "63"
+            startingLineNumber = "83"
+            endingLineNumber = "83"
             landmarkName = "loadingData(progress:)"
             landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ResearchSite/NetworkConnection.swift"
+            timestampString = "504297204.893914"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "43"
+            endingLineNumber = "43"
+            landmarkName = "init(_:countConnection:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ResearchSite/NetworkConnection.swift"
+            timestampString = "504305550.388022"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "55"
+            endingLineNumber = "55"
+            landmarkName = "getResultRequest(_:downloadProgressBlock:completion:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ResearchSite.NetworkConnectionToSite.getResultRequest (Swift.String, downloadProgressBlock : Swift.Optional&lt;(Swift.Float) -&gt; ()&gt;, completion : Swift.Optional&lt;(Swift.Optional&lt;Swift.AnyObject&gt;, Swift.Optional&lt;ResearchSite.IntParsingError&gt;) -&gt; ()&gt;) -&gt; ()"
+                  moduleName = "ResearchSite"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kkolontay/SearchTagSite/ResearchSite/NetworkConnection.swift"
+                  timestampString = "504298972.277612"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "54"
+                  endingLineNumber = "54"
+                  offsetFromSymbolStart = "520">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ResearchSite.NetworkConnectionToSite.getResultRequest (Swift.String, downloadProgressBlock : Swift.Optional&lt;(Swift.Float) -&gt; ()&gt;, completion : Swift.Optional&lt;(Swift.Optional&lt;Swift.AnyObject&gt;, Swift.Optional&lt;ResearchSite.IntParsingError&gt;) -&gt; ()&gt;) -&gt; ()"
+                  moduleName = "ResearchSite"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kkolontay/SearchTagSite/ResearchSite/NetworkConnection.swift"
+                  timestampString = "504298972.27909"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "54"
+                  endingLineNumber = "54"
+                  offsetFromSymbolStart = "1531">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ResearchSite.NetworkConnectionToSite.(getResultRequest (Swift.String, downloadProgressBlock : Swift.Optional&lt;(Swift.Float) -&gt; ()&gt;, completion : Swift.Optional&lt;(Swift.Optional&lt;Swift.AnyObject&gt;, Swift.Optional&lt;ResearchSite.IntParsingError&gt;) -&gt; ()&gt;) -&gt; ()).(closure #1)"
+                  moduleName = "ResearchSite"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kkolontay/SearchTagSite/ResearchSite/NetworkConnection.swift"
+                  timestampString = "504298972.280559"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "54"
+                  endingLineNumber = "54"
+                  offsetFromSymbolStart = "38">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ResearchSite/NetworkConnection.swift"
+            timestampString = "504305550.388022"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "107"
+            endingLineNumber = "107"
+            landmarkName = "urlSession(_:downloadTask:didFinishDownloadingTo:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ResearchSite/MultyThreadingExecution.swift"
+            timestampString = "504305604.005855"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "100"
+            endingLineNumber = "100"
+            landmarkName = "main()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ResearchSite.FetcherDataNetwork.main () -&gt; ()"
+                  moduleName = "ResearchSite"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kkolontay/SearchTagSite/ResearchSite/MultyThreadingExecution.swift"
+                  timestampString = "504305811.045752"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "100"
+                  endingLineNumber = "100"
+                  offsetFromSymbolStart = "1013">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ResearchSite.FetcherDataNetwork.(main () -&gt; ()).(closure #2)"
+                  moduleName = "ResearchSite"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kkolontay/SearchTagSite/ResearchSite/MultyThreadingExecution.swift"
+                  timestampString = "504305811.046915"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "100"
+                  endingLineNumber = "100"
+                  offsetFromSymbolStart = "61">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ResearchSite/ParserHTMLTag.swift"
+            timestampString = "504305653.395103"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "40"
+            endingLineNumber = "40"
+            landmarkName = "main()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.SymbolicBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "1"
+            continueAfterRunningActions = "No"
+            symbolName = "malloc_error_break"
+            moduleName = "">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "malloc_error_break"
+                  moduleName = "libsystem_malloc.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  offsetFromSymbolStart = "0">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

@@ -17,9 +17,9 @@ enum IntParsingError: Error {
     case invalidInput(String)
 }
 
-class NetworkConnectionToSite: NSObject {
+class NetworkConnectionToSite: NSObject, URLSessionDownloadDelegate {
     var site: String?
-    private var networkActivityCount: Int = 0 {
+        private var networkActivityCount: Int = 0 {
         didSet{
             UIApplication.shared.isNetworkActivityIndicatorVisible = (networkActivityCount > 0)
             
@@ -38,20 +38,21 @@ class NetworkConnectionToSite: NSObject {
         } else {
             configuration?.httpMaximumConnectionsPerHost = countConnection < 13 ? countConnection: 12
         }
-        // need change this value
+        
         session = URLSession(configuration: configuration!, delegate: self, delegateQueue: OperationQueue.main)
         let queue = session?.delegateQueue
         queue?.maxConcurrentOperationCount = countConnection //need change this value
       
     }
     
-    func getResultRequest(_ urlString: String, downloadProgressBlock: ProgressBlock?, completion: NetworkResolt?) -> URLSessionDataTask? {
+    func getResultRequest(_ urlString: String, downloadProgressBlock: ProgressBlock?, completion: NetworkResolt?) {
         let url = createURL(urlString)
         networkActivityCount += 1
         guard url != nil else {
-            return nil
+            return
         }
-        let task = session?.dataTask(with: (url as? URL)!) { [unowned self] (data, response, error) in
+        
+       let task = session?.dataTask(with: (url as? URL)!) { [unowned self] (data, response, error) in
             self.networkActivityCount -= 1
             self.progressHandler[url as! URL] = downloadProgressBlock
             if error != nil {
@@ -71,15 +72,13 @@ class NetworkConnectionToSite: NSObject {
                         }
                         return
                     }
-                   
                         completion!(data as AnyObject?, nil)
-                                      
                 }
             }
         }
-        return task
+        task?.resume()
     }
-    
+
     func createURL(_ stringURL: String) -> NSURL? {
         if   let url = NSURL(string: stringURL) {
         if url.scheme == nil {
@@ -91,21 +90,19 @@ class NetworkConnectionToSite: NSObject {
         }
          return NSURL(string: stringURL)
     }
-}
 
-extension NetworkConnectionToSite: URLSessionDownloadDelegate {
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
         if let url = downloadTask.originalRequest?.url, let progress = progressHandler[url]  {
             let persentDone = Float(totalBytesWritten) / Float(totalBytesExpectedToWrite)
             OperationQueue.main.addOperation {
                 progress(persentDone)
+                print("\(persentDone)\n")
             }
             
         }
 
     }
-    
-    
+   
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
         
     }
