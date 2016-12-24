@@ -9,16 +9,36 @@
 import UIKit
 
 
-enum ThreadStarus: String{
+enum ThreadStatus: String{
     case error
     case finished
     case canceled
     case uploading
     case ready
+    func getString() -> String {
+        switch self {
+        case .error:
+            return "Ошибка"
+        
+        case .finished:
+            return "Завершен"
+            
+        case .canceled:
+            return "Отменен"
+            
+        case .uploading:
+            return "Загрузка"
+            
+        case .ready:
+            return "Готов"
+            
+        
+        }
+    }
 }
 
 class DataThread {
-    init(_ url: String, status: ThreadStarus, quantitiCoincidence: Int, error: String?, listUrl: Array<String>, parser: ParserHTMLTag?, provider: FetcherDataNetwork?) {
+    init(_ url: String, status: ThreadStatus, quantitiCoincidence: Int, error: String?, listUrl: Array<String>, parser: ParserHTMLTag?, provider: FetcherDataNetwork?) {
         self.url = url
         self.status = status
         self.quantityCoincidence = quantitiCoincidence
@@ -33,13 +53,16 @@ class DataThread {
     }
     
     var url: String = ""
-    var status: ThreadStarus
+    var status: ThreadStatus
     var quantityCoincidence: Int?
     var error: String?
     var listUrl: Array<String>?
     var persentOfLoaded: Float = 0.0
     var parser: ParserHTMLTag?
     var provider: FetcherDataNetwork?
+    var statusString: String {
+        return status.getString()
+    }
 }
 
 // dictionary keys ("url", "countofstring", "error", "starus", "dictionary"
@@ -97,7 +120,7 @@ class DataThreads: NSObject {
     func fetchCoincidence(_ urlKey: String) -> Int {
         return  (quantityThread?[urlKey]?.quantityCoincidence)!
     }
-    func setStatus(_ urlKey: String, status: ThreadStarus) {
+    func setStatus(_ urlKey: String, status: ThreadStatus) {
         quantityThread?[urlKey]?.status = status
     }
     func setNewURL(_ urlKey: String, url: String) {
@@ -111,7 +134,7 @@ class DataThreads: NSObject {
             
         } else {
             if maxQuantityURL! > 0 {
-                quantityThread?[urlKey] = DataThread(url, status: .ready, quantitiCoincidence: 0, error: nil,listUrl: Array<String>(), parser: nil, provider: nil)
+                quantityThread?[urlKey] = DataThread(url, status: .ready, quantitiCoincidence: 0, error: nil, listUrl: Array<String>(), parser: nil, provider: nil)
                 maxQuantityURL = maxQuantityURL! - 1
             }
         }
@@ -124,9 +147,10 @@ class QueueDataThreads {
     
     
     var concurrentQueue:DispatchQueue?
+    var data: DataThreads?
     
     init(){
-        
+        data = DataThreads.sharedInstance
         concurrentQueue = DispatchQueue(label: "com.research.site", attributes: .concurrent)
         
     }
@@ -193,8 +217,8 @@ class QueueDataThreads {
         return error!
     }
     
-    func fetchStatus(_ url: String)  -> ThreadStarus {
-        var status: ThreadStarus?
+    func fetchStatus(_ url: String)  -> ThreadStatus {
+        var status: ThreadStatus?
         concurrentQueue?.sync {
             status = DataThreads.sharedInstance.quantityThread![url]?.status
         }
@@ -239,7 +263,7 @@ class QueueDataThreads {
         
     }
     
-    func setStatus(_ url: String, status: ThreadStarus) {
+    func setStatus(_ url: String, status: ThreadStatus) {
         
         concurrentQueue?.async(flags: .barrier) {
             DataThreads.sharedInstance.setStatus(url, status: status)

@@ -64,9 +64,9 @@ class ParserHTMLTag: MultyThreadingExecution {
             //print(self.url ?? <#default value#>)
             print("MATCHES = \(countOfMatches)")
             if delegate != nil {
-              OperationQueue.main.addOperation {
+             // OperationQueue.main.addOperation {
                      self.delegate?.reloadDataTable(self.url!)
-                }
+              //  }
                
             }
             

@@ -72,7 +72,7 @@ class InputConditionViewController: UIViewController, UITextFieldDelegate{
             }
         }
         if maxQuantityURLTextField.text?.isEmpty == false, let quantityURL = Int(maxQuantityURLTextField.text!) {
-            if quantityURL > 0 && quantityURL < 10000 {
+            if quantityURL > 0 && quantityURL < 500 {
                 maxReferences = quantityURL
             }
         }

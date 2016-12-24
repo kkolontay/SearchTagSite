@@ -39,7 +39,7 @@ class NetworkConnectionToSite: NSObject {
             configuration?.httpMaximumConnectionsPerHost = countConnection < 13 ? countConnection: 12
         }
         // need change this value
-        session = URLSession(configuration: configuration!, delegate: self, delegateQueue: nil)
+        session = URLSession(configuration: configuration!, delegate: self, delegateQueue: OperationQueue.main)
         let queue = session?.delegateQueue
         queue?.maxConcurrentOperationCount = countConnection //need change this value
       
@@ -48,9 +48,12 @@ class NetworkConnectionToSite: NSObject {
     func getResultRequest(_ urlString: String, downloadProgressBlock: ProgressBlock?, completion: NetworkResolt?) -> URLSessionDataTask? {
         let url = createURL(urlString)
         networkActivityCount += 1
-        let task = session?.dataTask(with: url as URL) { [unowned self] (data, response, error) in
+        guard url != nil else {
+            return nil
+        }
+        let task = session?.dataTask(with: (url as? URL)!) { [unowned self] (data, response, error) in
             self.networkActivityCount -= 1
-            self.progressHandler[url as URL] = downloadProgressBlock
+            self.progressHandler[url as! URL] = downloadProgressBlock
             if error != nil {
                 OperationQueue.main.addOperation {
                     completion!(nil, .invalidInput(error.debugDescription))
@@ -77,7 +80,7 @@ class NetworkConnectionToSite: NSObject {
         return task
     }
     
-    func createURL(_ stringURL: String) -> NSURL {
+    func createURL(_ stringURL: String) -> NSURL? {
         if   let url = NSURL(string: stringURL) {
         if url.scheme == nil {
             let component = NSURLComponents(url: url as URL, resolvingAgainstBaseURL: true)
@@ -86,7 +89,7 @@ class NetworkConnectionToSite: NSObject {
         }
            
         }
-         return NSURL(string: stringURL)!
+         return NSURL(string: stringURL)
     }
 }
 

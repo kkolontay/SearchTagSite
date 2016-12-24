@@ -17,12 +17,10 @@ class ThreadListViewController: UIViewController {
     var dataThreads: QueueDataThreads?
     var arrayOfKeys: Array<DataThread>?
     @IBOutlet weak var myTable: UITableView!
-    var dispatch: DispatchQueue?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         dataThreads = QueueDataThreads()
-        dispatch = DispatchQueue(label: "com.Cell", attributes: .concurrent)
         operationQueue = OperationQueue()
         if maximumThread != nil {
             operationQueue?.maxConcurrentOperationCount = maximumThread!
@@ -35,7 +33,6 @@ class ThreadListViewController: UIViewController {
         if !block.isExecuting {
         operationQueue?.addOperation(block)
         }
-        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -54,7 +51,7 @@ class ThreadListViewController: UIViewController {
             parserHtml.delegate = self
             parserHtml.addDependency(fetchData)
             if !fetchData.isExecuting && !parserHtml.isExecuting {
-            operationQueue?.addOperations([fetchData, parserHtml], waitUntilFinished: true)
+            operationQueue?.addOperations([fetchData, parserHtml], waitUntilFinished: false)
             }
         }
         
@@ -73,8 +70,6 @@ extension ThreadListViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! ThreadCharacterTableViewCell
         let index = indexPath.row
         
-        dispatch?.async {
-            
             var url: String?
             var keyArray: Array<String> = Array<String>()
             for key in (self.dataThreads?.fetchDictionary()?.keys)! {
@@ -85,41 +80,40 @@ extension ThreadListViewController: UITableViewDataSource {
             let data = self.dataThreads?.fetchObject(url!)
             DispatchQueue.main.async {
                 if data != nil {
-                    cell.setDataToCell(data: data!)
+                    cell.setDataToCell(data: data!, controller: self)
                 }
             }
-            
-        }
         
-        return cell
-        
+            return cell
     }
     
     override func viewDidDisappear(_ animated: Bool) {
+        if (operationQueue?.operations.count)! > 0 {
         operationQueue?.cancelAllOperations()
+        }
+        operationQueue = nil
         super.viewWillDisappear(animated)
     }
-    
 }
 
 extension ThreadListViewController: SearchingFinishedDelegate {
     func reloadDataTable(_ urlOld: String) {
         let lastSearch = dataThreads?.fetchObject(urlOld)
-        if lastSearch?.listUrl?.count != 0 && lastSearch?.status == ThreadStarus.finished {
+        if lastSearch?.listUrl?.count != 0 && lastSearch?.status == ThreadStatus.finished {
             guard lastSearch?.listUrl != nil else {return}
             for itemUrl in (lastSearch?.listUrl)! {
                 if (dataThreads?.maxQuantityURL)! > 0 {
                     print("qqqqqq\((dataThreads?.maxQuantityURL)!)")
-                    OperationQueue.main.addOperation {
+                    operationQueue?.addOperation {
                     
                         self.createTread(itemUrl)
                     }
                     print(itemUrl)
                     print("count of list \(lastSearch?.listUrl?.count)")
                 } else {
+                  
                     return
                 }
-                
             }
             dataThreads?.setParser(urlOld, parser: nil)
             dataThreads?.setProvider(urlOld, provider: nil)
